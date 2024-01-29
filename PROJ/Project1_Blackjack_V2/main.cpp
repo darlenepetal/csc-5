@@ -136,8 +136,7 @@ int main(int argc, char** argv) {
             crdUniq = true;
             while (inDeal >> readVal) {     // this took me quite a
                 if (tempVal == readVal) {   // while to get working
-                    crdUniq = false;        // properly because i
-                    break;                  // didn't realize that
+                    crdUniq = false;        // properly because
                 }                           // inDeal needs to be
             }                               // opened and closed
             inDeal.close();                 // each time it is read
