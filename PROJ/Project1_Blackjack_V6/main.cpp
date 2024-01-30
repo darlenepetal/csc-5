@@ -207,11 +207,12 @@ int main(int argc, char** argv) {
                 if (tempVal > 10) tempVal = 10;
                 else if (tempVal == 1) dlrAces++;
                 
-                
-                if (dlrHand+11 >= 17 && dlrAces > 0) {
+                if (dlrHand+11 == 21 && dlrAces > 0) dlrHand += 11;
+                else if (dlrHand+11 >= 17 && dlrAces > 0) {
                     dlrHand += tempVal;
+                    dlrAces--;
                 }
-                if (dlrHand <= 10 && dlrAces > 0) dlrHand += 11;
+                else if (dlrHand <= 10 && dlrAces > 0) dlrHand += 11;
                 else dlrHand += tempVal;
                 
                 while (dlrHand > 21 && dlrAces > 0) {
@@ -232,9 +233,11 @@ int main(int argc, char** argv) {
                 tempVal = (tempVal-1)%13+1;
                 if (tempVal > 10) tempVal = 10;
                 else if (tempVal == 1) usrAces++;
-
-                if (usrHand+11 >= 17 && usrAces > 0) {
+                
+                if (usrHand+11 == 21 && usrAces > 0) usrHand += 11;
+                else if (usrHand+11 >= 17 && usrAces > 0) {
                     usrHand += tempVal;
+                    usrAces--;
                 }
                 else if (usrHand <= 10 && usrAces > 0) usrHand += 11;
                 else usrHand += tempVal;
@@ -381,16 +384,9 @@ int main(int argc, char** argv) {
                 cout << "DEALER WINS" << endl;
             }
         }
-        else if (usrHand == dlrHand) {
-            if (dlrHand >= 17) {
-                cout << "DEALER STANDS" << endl;
-            }
-            cout << "TIE" << endl;
-            usrCash += betAmnt;
-        }
         else if ((usrCrds==2 && usrHand==21) || (dlrHand==21 && dlrCrds==2)) {
             cout << "BLACKJACK" << endl;
-            if ((usrCrds==2 && usrHand==21) || (dlrHand==21 && dlrCrds==2)) {
+            if ((usrCrds==2 && usrHand==21) && (dlrHand==21 && dlrCrds==2)) {
                 cout << "TIE" << endl;
                 usrCash += betAmnt;
             }
@@ -401,6 +397,13 @@ int main(int argc, char** argv) {
             else {
                 cout << "DEALER WINS" << endl;
             }
+        }
+        else if (usrHand == dlrHand) {
+            if (dlrHand >= 17) {
+                cout << "DEALER STANDS" << endl;
+            }
+            cout << "TIE" << endl;
+            usrCash += betAmnt;
         }
         else {
             cout << "DEALER STANDS" << endl;
