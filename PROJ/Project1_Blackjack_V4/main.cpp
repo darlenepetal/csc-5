@@ -7,7 +7,7 @@
  * File:    main.cpp
  * Author:  Noah Garthwaite
  * Created on January 29, 2024, 9:59 AM
- * Purpose: Project1_Blackjack_V3
+ * Purpose: Project1_Blackjack_V4
  */
 
 //System Libraries
