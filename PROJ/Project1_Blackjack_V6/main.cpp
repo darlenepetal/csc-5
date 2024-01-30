@@ -253,7 +253,8 @@ int main(int argc, char** argv) {
             (usrHand >= 22)                 ? hndOver = true :
             (dlrHand >= 22)                 ? hndOver = true :
             (usrCrds == 5)                  ? hndOver = true :
-            (dlrCrds == 5)                  ? hndOver = true : hndOver = false;
+            (dlrCrds == 5)                  ? hndOver = true : 
+            (usrCrds == 2 && usrHand == 21) ? hndOver = true : hndOver = false;
             
             if (hndOver) dlrShow = true;
 
@@ -389,7 +390,11 @@ int main(int argc, char** argv) {
         }
         else if ((usrCrds==2 && usrHand==21) || (dlrHand==21 && dlrCrds==2)) {
             cout << "BLACKJACK" << endl;
-            if (usrHand == 21 && usrCrds == 2) {
+            if ((usrCrds==2 && usrHand==21) || (dlrHand==21 && dlrCrds==2)) {
+                cout << "TIE" << endl;
+                usrCash += betAmnt;
+            }
+            else if (usrHand == 21 && usrCrds == 2) {
                 cout << "YOU WIN!" << endl;
                 usrCash += betAmnt*4;
             }
