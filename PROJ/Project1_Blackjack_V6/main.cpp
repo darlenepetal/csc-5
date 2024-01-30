@@ -38,7 +38,6 @@ int main(int argc, char** argv) {
     bool            validIn,
                     crdUniq,
                     hndOver,
-                    usrWins,
                     usrStnd,
                     dblDown,
                     dlrShow;
