@@ -43,7 +43,6 @@ int main(int argc, char** argv) {
     
     //The Process -> Map Inputs to Outputs
     nOpshun = 10;    //In this case we have 3 options
-    cout << static_cast<unsigned short>(nOpshun);
     do{
         //Display user choice
         cout<<"Choose from the options displayed"<<endl;
@@ -59,7 +58,7 @@ int main(int argc, char** argv) {
         cout<<"10-> 2 or 3 Max"<<endl;
         cin>>option;    //Read in the option
         //Use a switch case to implement
-        switch(static_cast<unsigned short>(option)){
+        switch(option){
             case 1:     sum();cout<<endl<<endl;break;
             case 2:     payInPennies();cout<<endl<<endl;break;
             case 3:     minMax();cout<<endl<<endl;break;
