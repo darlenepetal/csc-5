@@ -36,32 +36,38 @@ int main(int argc, char** argv) {
     
     //Declare Variables
     float           usrCash,
-                    betAmnt;
+                    betAmnt,
+                    avgCash;
     bool            validIn,
                     crdUniq,
                     hndOver,
                     usrStnd,
                     dblDown,
-                    dlrShow;
+                    dlrShow,
+                    dlrSoft,
+                    usrSoft;
     unsigned char   crdFace,
                     crdsDlt,
                     dlrCrds,
                     usrCrds,
-                    dlrAces,
-                    usrAces,
                     usrInpt;
     unsigned short  tempVal,
                     readVal,
                     dlrHand,
-                    usrHand;
+                    usrHand,
+                    usrWins,
+                    roundNo;
     string          tempStr,
                     crdSuit;
     fstream         outVals,
                     outStrs,
+                    outStat,
                     inVals,
-                    inStrs;
+                    inStrs,
+                    inStat;
 
     //Initialize or input i.e. set variable values
+    usrWins = 0;
     usrCash = 1000.0f;
     
     while (true) {
@@ -148,7 +154,7 @@ int main(int argc, char** argv) {
         }                                       
 
         cout << " O-----------BLACKJACK----------O" << endl;
-        cout << " |    DEALER MUST STAND ON 17   |" << endl;
+        cout << " |    DEALER MUST HIT SOFT 17   |" << endl;
         cout << " |     BLACKJACK PAYS 3 TO 1    |" << endl;
         cout << " |     FIVE CARD PAYS 5 TO 1    |" << endl;
         cout << " O-----------*˖°.+.°˖*----------O" << endl;
@@ -195,33 +201,32 @@ int main(int argc, char** argv) {
         dblDown = usrStnd = dlrShow = hndOver = false;
 
         do {
-            usrHand = dlrHand = usrAces = dlrAces = 0;
+            usrHand = dlrHand = 0;
+            usrSoft = dlrSoft = false;
             crdsDlt = usrCrds + dlrCrds;
 
             // calculate hand totals before cards are displayed
             // calculate totals separately to avoid excessive ace checks
             // calculate dealer total first
             inVals.open("crdVals.dat", ios::in);
-            for (char curCard = char(1); curCard <= crdsDlt; curCard++) {
+            for (char curCard = char(1); curCard <= crdsDlt; curCard++) { 
                 inVals >> tempVal;
+                
                 if (curCard > 2 && curCard <= usrCrds+2) continue;
 
                 tempVal = (tempVal-1)%13+1;
                 if (tempVal > 10) tempVal = 10;
-                else if (tempVal == 1) dlrAces++;
+                dlrHand += tempVal;
                 
-                if (dlrHand+11 == 21 && dlrAces > 0) dlrHand += 11;
-                else if (dlrHand+11 >= 17 && dlrAces > 0) {
-                    dlrHand += tempVal;
-                    dlrAces--;
+                if (tempVal == 1 && dlrHand < 12 && !dlrSoft) {
+                    dlrHand += 10;
+                    dlrSoft = true;
                 }
-                else if (dlrHand <= 10 && dlrAces > 0) dlrHand += 11;
-                else dlrHand += tempVal;
-                
-                while (dlrHand > 21 && dlrAces > 0) {
+                else if (dlrSoft && dlrHand > 21) {
                     dlrHand -= 10;
-                    dlrAces--;
+                    dlrSoft = false;
                 }
+                
             }
             inVals.close();
 
@@ -235,19 +240,15 @@ int main(int argc, char** argv) {
 
                 tempVal = (tempVal-1)%13+1;
                 if (tempVal > 10) tempVal = 10;
-                else if (tempVal == 1) usrAces++;
+                usrHand += tempVal;
                 
-                if (usrHand+11 == 21 && usrAces > 0) usrHand += 11;
-                else if (usrHand+11 >= 17 && usrAces > 0) {
-                    usrHand += tempVal;
-                    usrAces--;
+                if (tempVal == 1 && usrHand < 12 && !usrSoft) {
+                    usrHand += 10;
+                    usrSoft = true;
                 }
-                else if (usrHand <= 10 && usrAces > 0) usrHand += 11;
-                else usrHand += tempVal;
-                
-                while (usrHand > 21 && usrAces > 0) {
+                else if (usrSoft && usrHand > 21) {
                     usrHand -= 10;
-                    usrAces--;
+                    usrSoft = false;
                 }
             }
             inVals.close();
@@ -262,6 +263,7 @@ int main(int argc, char** argv) {
             (dlrCrds == 5)                  ? hndOver = true : 
             (usrCrds == 2 && usrHand == 21) ? hndOver = true : hndOver = false;
             
+            if (hndOver && dlrHand == 17 && dlrSoft == true) hndOver = false;
             if (hndOver) dlrShow = true;
 
             // display dealer cards & total first
@@ -358,9 +360,11 @@ int main(int argc, char** argv) {
                 cout << endl;
             }
             
-            if (dlrShow && !hndOver && dlrHand < 17) {
-                cout << "DEALER HITS" << endl << endl;
-                dlrCrds++;
+            if (dlrShow && !hndOver) {
+                if (dlrHand < 17 || (dlrHand == 17 && dlrSoft)) {
+                    cout << "DEALER HITS" << endl << endl;
+                    dlrCrds++;
+                }
             }
             
         } while (!hndOver);
@@ -376,12 +380,14 @@ int main(int argc, char** argv) {
             cout << "DEALER BUSTS" << endl;
             cout << "YOU WIN!" << endl;
             usrCash += betAmnt*2;
+            usrWins++;
         }
         else if (usrCrds == 5 || dlrCrds == 5) {
             cout << "FIVE CARDS" << endl;
             if (usrCrds == 5) {
                 cout << "YOU WIN!" << endl;
                 usrCash += betAmnt*6;
+                usrWins++;
             }
             else {
                 cout << "DEALER WINS" << endl;
@@ -396,15 +402,14 @@ int main(int argc, char** argv) {
             else if (usrHand == 21 && usrCrds == 2) {
                 cout << "YOU WIN!" << endl;
                 usrCash += betAmnt*4;
+                usrWins++;
             }
             else {
                 cout << "DEALER WINS" << endl;
             }
         }
         else if (usrHand == dlrHand) {
-            if (dlrHand >= 17) {
-                cout << "DEALER STANDS" << endl;
-            }
+            cout << "DEALER STANDS" << endl;
             cout << "TIE" << endl;
             usrCash += betAmnt;
         }
@@ -413,6 +418,7 @@ int main(int argc, char** argv) {
             if (usrHand > dlrHand) {
                 cout << "YOU WIN!" << endl;
                 usrCash += betAmnt*2;
+                usrWins++;
             }
             else {
                 cout << "DEALER WINS" << endl;
