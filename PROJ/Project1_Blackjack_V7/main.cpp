@@ -36,8 +36,9 @@ int main(int argc, char** argv) {
     
     //Declare Variables
     float           usrCash,
+                    usrAvgs,
                     betAmnt,
-                    avgCash;
+                    allBets;
     bool            validIn,
                     crdUniq,
                     hndOver,
@@ -45,7 +46,8 @@ int main(int argc, char** argv) {
                     dblDown,
                     dlrShow,
                     dlrSoft,
-                    usrSoft;
+                    usrSoft,
+                    usrWon;
     unsigned char   crdFace,
                     crdsDlt,
                     dlrCrds,
@@ -56,23 +58,95 @@ int main(int argc, char** argv) {
                     dlrHand,
                     usrHand,
                     usrWins,
+                    usrStrk,
+                    bstStrk,
                     roundNo;
     string          tempStr,
                     crdSuit;
     fstream         outVals,
                     outStrs,
-                    outStat,
+                    outData,
                     inVals,
                     inStrs,
-                    inStat;
+                    inData;
 
     //Initialize or input i.e. set variable values
-    usrWins = 0;
+    outData.open("hndData.dat", ios::out);
+    usrWins = roundNo = usrAvgs = allBets = 0;
     usrCash = 1000.0f;
     
-    while (true) {
+    while (true) {                                       
+
+        cout << " O-----------BLACKJACK----------O" << endl;
+        cout << " |    DEALER MUST HIT SOFT 17   |" << endl;
+        cout << " |     BLACKJACK PAYS 3 TO 1    |" << endl;
+        cout << " |     FIVE CARD PAYS 5 TO 1    |" << endl;
+        cout << " O-----------*˖°.+.°˖*----------O" << endl;
+
+        cout << fixed << setprecision(2) << showpoint;
+        cout << endl << "You have: $" << usrCash << endl;
+        cout << "How much would you like to bet?" << endl << endl;
+        cout << "Minimum bet is 50." << endl;
+        cout << "Input a bet of 0 to walk away" << endl; 
+        cout << "with your current cash." << endl << endl;
+
+        do {
+            betAmnt = 0;
+            cout << "Enter bet: ";
+            cin >> betAmnt;
+            cout << endl;
+
+            if (betAmnt < 50.0f && betAmnt > 0) {
+                validIn = false;
+                cout << "Bet must be at least 50." << endl;
+            }
+            else if (betAmnt > usrCash) {
+                validIn = false;
+                cout << "You can't bet more than you have, wise guy." << endl;
+            }
+            else if (betAmnt < 0.0f) {
+                validIn = false;
+                cout << "You can't bet a negative amount. Nice try." << endl;
+            }
+            else {
+                validIn = true;
+                }
+        } while (validIn == false);
+
+        if (betAmnt == 0) {
+            cout << "You walked away with $" << usrCash;
+            (usrCash > 1000.0f) ? (cout << "!") : (cout << ".");
+            cout << endl;
+            cout << "See session statistics? (y/n)" << endl;
+            cout << "Enter decision: ";
+            cin >> usrInpt;
+            cout << endl;
+            if (usrInpt == 'y' || usrInpt == 'Y') {
+                inData.open("hndData.dat", ios::in);
+                while (inData >> betAmnt) {
+                    usrAvgs += betAmnt;
+                }
+                cout << "Hands played........";
+                cout << roundNo << endl;
+                cout << "Hands lost..........";
+                cout << roundNo - usrWins << endl;
+                cout << "Hands won..........."; 
+                cout << usrWins << endl;
+                cout << "Best win streak.....";
+                cout << bstStrk << endl;
+                cout << "Average $ bet.......";
+                cout << allBets/roundNo << endl;
+                cout << "Average $ won......."; 
+                cout << betAmnt/roundNo << endl;
+            }
+            
+            return 0;
+        }
+        else usrCash -= betAmnt;
+        
         outVals.open("crdVals.dat", ios::out);
         outStrs.open("crdStrs.dat", ios::out);
+        roundNo++;
         
         /* in (this version of) blackjack, the player automatically
         * wins the hand if they are dealt 5 cards without busting.
@@ -151,58 +225,14 @@ int main(int argc, char** argv) {
                 default:    crdSuit = "♢";
             }
             outStrs << crdFace << crdSuit << endl;
-        }                                       
-
-        cout << " O-----------BLACKJACK----------O" << endl;
-        cout << " |    DEALER MUST HIT SOFT 17   |" << endl;
-        cout << " |     BLACKJACK PAYS 3 TO 1    |" << endl;
-        cout << " |     FIVE CARD PAYS 5 TO 1    |" << endl;
-        cout << " O-----------*˖°.+.°˖*----------O" << endl;
-
-        cout << fixed << setprecision(2) << showpoint;
-        cout << endl << "You have: $" << usrCash << endl;
-        cout << "How much would you like to bet?" << endl << endl;
-        cout << "Minimum bet is 50." << endl;
-        cout << "Input a bet of 0 to walk away" << endl; 
-        cout << "with your current cash." << endl << endl;
-
-        do {
-            betAmnt = 0;
-            cout << "Enter bet: ";
-            cin >> betAmnt;
-            cout << endl;
-
-            if (betAmnt < 50.0f && betAmnt > 0) {
-                validIn = false;
-                cout << "Bet must be at least 50." << endl;
-            }
-            else if (betAmnt > usrCash) {
-                validIn = false;
-                cout << "You can't bet more than you have, wise guy." << endl;
-            }
-            else if (betAmnt < 0.0f) {
-                validIn = false;
-                cout << "You can't bet a negative amount. Nice try." << endl;
-            }
-            else {
-                validIn = true;
-                }
-        } while (validIn == false);
-
-        if (betAmnt == 0) {
-            cout << "You walked away with $" << usrCash;
-            (usrCash > 1000.0f) ? (cout << "!") : (cout << ".");
-            cout << endl;
-            return 0;
         }
-        else usrCash -= betAmnt;
 
         usrCrds = dlrCrds = 2;
         dblDown = usrStnd = dlrShow = hndOver = false;
 
         do {
             usrHand = dlrHand = 0;
-            usrSoft = dlrSoft = false;
+            usrSoft = dlrSoft = usrWon = false;
             crdsDlt = usrCrds + dlrCrds;
 
             // calculate hand totals before cards are displayed
@@ -371,26 +401,29 @@ int main(int argc, char** argv) {
         
         outVals.close();
         outStrs.close();
+        allBets += betAmnt;
         
         if (usrHand > 21) {
             cout << "YOU BUST" << endl;
             cout << "DEALER WINS" << endl;
+            betAmnt *= -1;
         }
         else if (dlrHand > 21) {
             cout << "DEALER BUSTS" << endl;
             cout << "YOU WIN!" << endl;
-            usrCash += betAmnt*2;
-            usrWins++;
+            betAmnt *= 2;
+            usrWon = true;
         }
         else if (usrCrds == 5 || dlrCrds == 5) {
             cout << "FIVE CARDS" << endl;
             if (usrCrds == 5) {
                 cout << "YOU WIN!" << endl;
-                usrCash += betAmnt*6;
-                usrWins++;
+                betAmnt *= 6;
+                usrWon = true;
             }
             else {
                 cout << "DEALER WINS" << endl;
+                betAmnt *= -1;
             }
         }
         else if ((usrCrds==2 && usrHand==21) || (dlrHand==21 && dlrCrds==2)) {
@@ -398,33 +431,47 @@ int main(int argc, char** argv) {
             if ((usrCrds==2 && usrHand==21) && (dlrHand==21 && dlrCrds==2)) {
                 cout << "TIE" << endl;
                 usrCash += betAmnt;
+                betAmnt = 0;
             }
             else if (usrHand == 21 && usrCrds == 2) {
                 cout << "YOU WIN!" << endl;
-                usrCash += betAmnt*4;
-                usrWins++;
+                betAmnt *= 4;
+                usrWon = true;
             }
             else {
                 cout << "DEALER WINS" << endl;
+                betAmnt *= -1;
             }
         }
         else if (usrHand == dlrHand) {
             cout << "DEALER STANDS" << endl;
             cout << "TIE" << endl;
             usrCash += betAmnt;
+            betAmnt = 0;
         }
         else {
             cout << "DEALER STANDS" << endl;
             if (usrHand > dlrHand) {
                 cout << "YOU WIN!" << endl;
-                usrCash += betAmnt*2;
-                usrWins++;
+                betAmnt *= 2;
+                usrWon = true;
             }
             else {
                 cout << "DEALER WINS" << endl;
+                betAmnt *= -1;
             }
         }
         cout << endl;
+        
+        if (usrWon) {
+            usrCash += betAmnt;
+            usrWins++;
+            usrStrk++;
+            if (usrStrk > bstStrk) bstStrk = usrStrk;
+        }
+        else usrStrk = 0;
+        
+        outData << betAmnt << endl;
         
         if (usrCash == 0) {
             cout << "You ran out of money and were" << endl;
