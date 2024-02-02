@@ -400,7 +400,7 @@ int main(void) {
                 // skip if card belongs to the user
                 else if (curCard <= usrCrds+2) continue;
                 // show any additional cards
-                else if (curCard <= crdsDlt) {
+                else {
                     cout << tempStr << " ";
                 }
             }
@@ -419,7 +419,7 @@ int main(void) {
                     cout << "Player: " << usrHand << endl << tempStr << " ";
                 }
                 // display any additional cards
-                else if (curCard <= usrCrds+2) {
+                else {
                     cout << tempStr << " ";
                 }
             }
