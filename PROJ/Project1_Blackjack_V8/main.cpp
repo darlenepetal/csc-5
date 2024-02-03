@@ -428,11 +428,11 @@ int main(void) {
             
             // if user can still hit, let them choose if they want to
             if (!usrStnd && !dlrShow && !hndOver) {
-                cout <<     "Pot total: $" << betAmnt << endl;
-                cout <<     "You have: $" << usrCash << endl << endl;
-                cout <<     "What would you like to do?" << endl;
-                cout <<     "Type S to Stand" << endl;
-                cout <<     "Type H to Hit" << endl;
+                cout << "Pot total: $" << betAmnt << endl;
+                cout << "You have: $" << usrCash << endl << endl;
+                cout << "What would you like to do?" << endl;
+                cout << "Type S to Stand" << endl;
+                cout << "Type H to Hit" << endl;
                 // don't display double-down option if user lacks funds
                 if (usrCash >= betAmnt) {
                     cout << "Type D to Double Down" << endl;
