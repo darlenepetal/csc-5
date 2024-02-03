@@ -433,8 +433,8 @@ int main(void) {
                 cout << "What would you like to do?" << endl;
                 cout << "Type S to Stand" << endl;
                 cout << "Type H to Hit" << endl;
-                // don't display double-down option if user lacks funds
-                if (usrCash >= betAmnt) {
+                // don't display double-down option if user can't do it
+                if (usrCash >= betAmnt && usrCrds == 2) {
                     cout << "Type D to Double Down" << endl;
                 }
                 
@@ -453,7 +453,9 @@ int main(void) {
                         case 'H':   usrCrds++;
                                     break;
                         case 'd':   // if user can't double down but tries...
-                        case 'D':   if (usrCash < betAmnt) validIn = false;
+                        case 'D':   if (usrCash < betAmnt || usrCrds != 2) {
+                                        validIn = false;
+                                    }
                                     else {
                                         // user must stand after double down
                                         usrStnd = true;
@@ -468,7 +470,11 @@ int main(void) {
                     
                     // display why input is invalid
                     if (validIn == false) {
-                        if (usrInpt == 'd' || usrInpt == 'D') {
+                        if ((usrInpt=='d' || usrInpt=='D') && usrCrds != 2) {
+                            cout << "You can only double down" << endl;
+                            cout << "if you have two cards.";
+                        }
+                        else if (usrInpt=='d' || usrInpt=='D') {
                             cout << "You need to have at least" << endl;
                             cout << "$" << betAmnt << " to double down.";
                         }
