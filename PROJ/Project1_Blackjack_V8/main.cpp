@@ -78,11 +78,11 @@ int main(void) {
     // gameplay loop starts here                    // show two decimal places.                            
     while (true) {
 
-        cout << " O-----------BLACKJACK----------O" << endl;
-        cout << " |    DEALER MUST HIT SOFT 17   |" << endl;
-        cout << " |     BLACKJACK PAYS 3 TO 1    |" << endl;
-        cout << " |     FIVE CARD PAYS 5 TO 1    |" << endl;
-        cout << " O-----------*˖°.+.°˖*----------O" << endl;
+        cout << "O-----------BLACKJACK----------O" << endl;
+        cout << "|    DEALER MUST HIT SOFT 17   |" << endl;
+        cout << "|     BLACKJACK PAYS 3 TO 1    |" << endl;
+        cout << "|     FIVE CARD PAYS 5 TO 1    |" << endl;
+        cout << "O-----------*˖°.+.°˖*----------O" << endl;
 
         cout << endl << "You have: $" << usrCash << endl;
         cout << "How much would you like to bet?" << endl << endl;
@@ -361,7 +361,7 @@ int main(void) {
             (dlrCrds == 2 && dlrHand == 21) ? hndOver = true :
             // dealer beat the user
             (dlrShow && dlrHand > usrHand)  ? hndOver = true :
-            // dealer got over 17
+            // dealer got at least 17
             (dlrShow && dlrHand >= 17)      ? hndOver = true :
             // user busted
             (usrHand >= 22)                 ? hndOver = true :
@@ -380,6 +380,9 @@ int main(void) {
             // allow the user a chance to hit continue again, or else
             // the messages could display a little too fast
             if (hndOver || usrStnd || usrHand>20) dlrShow = true;
+            
+            // allow user to keep going for five cards if they can
+            if (usrCrds < 5 && usrHand == 21 && usrSoft) dlrShow = false;
 
             // display dealer cards & total first
             inStrs.open("crdStrs.dat", ios::in);
