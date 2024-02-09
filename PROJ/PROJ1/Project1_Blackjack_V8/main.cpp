@@ -6,7 +6,7 @@
  */
 
 // system libraries // used to...
-#include <iostream> // get user input and display outpurs
+#include <iostream> // get user input and display outputs
 #include <iomanip>  // format dollar amount outputs
 #include <fstream>  // handle session stats & store cards for current hand
 #include <string>   // handle "continue" input & suit ascii
