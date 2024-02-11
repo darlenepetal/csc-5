@@ -442,7 +442,7 @@ void endGame(float cash[], float bets[], short rnds) {
     
     // sort arrays for easy
     selSrt(cash, rnds);
-    bublSrt(cash, rnds);
+    bublSrt(bets, rnds);
     
     // log session statistics in .txt file
     outData << "----------------------------------------" << endl;
