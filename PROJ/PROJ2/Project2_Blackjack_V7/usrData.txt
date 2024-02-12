@@ -1,0 +1,36 @@
+----------------------------------------
+Hands played...........5
+Hands lost.............3
+Hands won..............2
+Best win streak........2
+Most $ won............$1200
+Average $ won.........$-120
+Standard deviation....$884.081
+Most $ bet............$1500
+Average $ bet.........$680
+Standard deviation....$507.543
+----------------------------------------
+----------------------------------------
+Hands played...........6
+Hands lost.............3
+Hands won..............3
+Best win streak........2
+Most $ won............$1200
+Average $ won.........$66.6667
+Standard deviation....$986.013
+Most $ bet............$1500
+Average $ bet.........$716.667
+Standard deviation....$393.347
+----------------------------------------
+----------------------------------------
+Hands played...........4
+Hands lost.............1
+Hands won..............3
+Best win streak........3
+Most $ won............$2000
+Average $ won.........$300
+Standard deviation....$2504
+Most $ bet............$4000
+Average $ bet.........$1550
+Standard deviation....$1451.72
+----------------------------------------

@@ -73,7 +73,7 @@ int main(void) {
     usrCash = 1000.0f;  // user starts with $1000.00
     
     //configure output to show two decimal places on dollar amounts
-    cout << fixed << setprecision(2) << showpoint;  
+    cout << fixed << setprecision(2) << showpoint;
     
     if (askMore(moreDck)) {
         cout << endl << "Enter number of decks to use." << endl;
@@ -81,7 +81,7 @@ int main(void) {
             cout << "Input number: ";
             cin >> decksNo;
             if (decksNo < 1) 
-                cout << "Minimum number of decks is 0.";
+                cout << "Minimum number of decks is 1.";
             else if (decksNo > 8) 
                 cout << "Maximum number of decks is 8.";
             cout << endl << endl;
@@ -320,12 +320,8 @@ bool askMore(bool &moreDck) {
     cout << "decks are used in this session? (y/n)" << endl;
     cin >> usrInpt;
     
-    if (usrInpt == 'y' || usrInpt == 'Y') {
-        moreDck = true;
-        return moreDck;
-    }
-    
-    moreDck = false;
+    moreDck = (usrInpt == 'y' || usrInpt == 'Y') ? true : false;
+        
     return moreDck;
 }
 
@@ -545,7 +541,7 @@ void dckInit(short vals[], char strs[][MAXCOLS], short decks) {
         }
 
         // parse how to display a card's suit based on card id
-        switch (i / 13) 
+        switch ((i % N_DECK)/13) 
         {
             case 0:     strs[i][1] = '\xe2';
                         strs[i][2] = '\x99';
